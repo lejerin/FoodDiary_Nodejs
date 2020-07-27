@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.SystemClock
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.fooddiary.Adapter.ViewPagerAdapter
@@ -26,6 +27,7 @@ class DetailPostActivity : AppCompatActivity() {
 
     val photoList = mutableListOf<String>()
 
+    var id = ""
     var x = 0.0
     var y = 0.0
 
@@ -36,9 +38,6 @@ class DetailPostActivity : AppCompatActivity() {
         back_btn.setOnClickListener {
             supportFinishAfterTransition()
         }
-
-
-
 
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
@@ -62,7 +61,7 @@ class DetailPostActivity : AppCompatActivity() {
         //postnum, count로 사진이랑 날짜 갖고옴
 
         add_date_text.text = intent.getStringExtra("date")
-        val id = intent.getStringExtra("id")
+        id = intent.getStringExtra("id")
         getPostnumCountPhoto(id)
 
 
@@ -76,6 +75,20 @@ class DetailPostActivity : AppCompatActivity() {
             startActivity(mapDetailIntent)
         }
 
+        detail_post_delete_btn.setOnClickListener {
+            val builder = AlertDialog.Builder(this@DetailPostActivity)
+            builder.setMessage("정말로 삭제하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    setServerDeleteData()
+                }
+                .setNegativeButton("No") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
+        }
 
     }
 
@@ -108,10 +121,31 @@ class DetailPostActivity : AppCompatActivity() {
         })
     }
 
+    private fun setServerDeleteData(){
+
+        RetrofitClient.getService().setDeletePhotoById("\"" + id + "\"").enqueue(object :
+            Callback<Photo> {
+            override fun onFailure(call: Call<Photo>, t: Throwable) {
+                System.out.println("서버 오류입니다 "+ t.message)
+            }
+
+            override fun onResponse(call: Call<Photo>, response: Response<Photo>) {
+                if (response.isSuccessful) {
+                    System.out.println("삭제완료")
+                    MainActivity.getInstancem().refreshHome(44,RESULT_OK,null)
+                    finish()
+                }else{
+                    System.out.println("없음")
+
+                }
+
+            }
+
+        })
+    }
 
 
     private fun initView(photo: Photo){
-
 
         if(photo.uri2 != null)
             photoList.add(photo.uri2)

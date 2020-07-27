@@ -64,6 +64,11 @@ interface GetDataService {
         @Query("order") order: String
     ): Call<List<Time>>
 
+    @DELETE("photos")
+    fun setDeletePhotoById(
+        @Query("id") id: String
+    ): Call<Photo>
+
     @GET("keyword.json")
     fun getKeywordMap(
         @Query("query") query: String,

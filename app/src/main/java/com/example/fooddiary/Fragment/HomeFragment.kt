@@ -2,6 +2,7 @@ package com.example.fooddiary.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -133,6 +134,21 @@ class HomeFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+
+        if(requestCode == 44 && resultCode == AppCompatActivity.RESULT_OK){
+            Handler().postDelayed(
+                {
+                    System.out.println("초기화")
+                    timeList.clear()
+                    photoList.clear()
+                    //이전에 저장했던 데이터대로 수정필요
+                    getUserTime()
+                },
+                1000 // value in milliseconds
+            )
+        }
+
+
         if(requestCode == 55 && resultCode == AppCompatActivity.RESULT_OK){
             System.out.println("초기화")
             timeList.clear()
@@ -140,7 +156,6 @@ class HomeFragment : Fragment() {
             //이전에 저장했던 데이터대로 수정필요
             getUserTime()
         }
-
     }
 
 }

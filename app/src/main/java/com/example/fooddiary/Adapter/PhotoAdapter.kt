@@ -44,11 +44,8 @@ class PhotoAdapter(adapter: Int ,photoList: MutableList<Time>) : RecyclerView.Ad
             var output: String = SimpleDateFormat("yyyy년 M월 d일", Locale.KOREA).format(StringtoDate(photoList!![position].date))
             detailPostIntent.putExtra("date", output)
 
-
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as MainActivity, holder!!.imageView, "profile")
-                context.startActivity(detailPostIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), options.toBundle())
-
-
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as MainActivity, holder!!.imageView, "profile")
+            context.startActivity(detailPostIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), options.toBundle())
 
 
         }

@@ -39,10 +39,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var mToolBarNavigationListenerIsRegistered = false
 
 
+    companion object {
+
+        lateinit var instance : MainActivity
+
+        fun getInstancem() : MainActivity {
+
+            return instance
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        MainActivity.instance = this
 
 
         setSupportActionBar(toolbar)
@@ -266,11 +278,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onActivityResult(requestCode, resultCode, data)
 
         System.out.println("초기화 액티비티")
+        refreshHome(requestCode, resultCode, data)
 
+    }
 
+    public fun refreshHome(requestCode: Int, resultCode: Int, data: Intent?){
         homeFragment.onActivityResult(requestCode, resultCode, data)
-
-
     }
 
     fun setNowDateOnBar(){

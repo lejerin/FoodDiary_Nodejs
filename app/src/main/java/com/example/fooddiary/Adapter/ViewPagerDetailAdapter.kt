@@ -13,51 +13,39 @@ import com.example.fooddiary.Activity.DetailPostActivity
 import com.example.fooddiary.Activity.MainActivity
 import com.example.fooddiary.Activity.ViewPagerActivity
 import com.example.fooddiary.R
+import kotlinx.android.synthetic.main.item_photo_detail_viewpager.view.*
 import kotlinx.android.synthetic.main.item_photo_viewpager.view.*
+import kotlinx.android.synthetic.main.item_photo_viewpager.view.ivItem
 import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ViewPagerAdapter(private val list: ArrayList<String>): PagerAdapter() {
-
-    private lateinit var context: Context
+class ViewPagerDetailAdapter(private val isUri : Boolean,private val list: ArrayList<String>): PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        context = container!!.context
+
 
         val inflater = LayoutInflater.from(container.context)
-        val view = inflater.inflate(R.layout.item_photo_viewpager, container, false)
+        val view = inflater.inflate(R.layout.item_photo_detail_viewpager, container, false)
 
-        view.ivItem.setClipToOutline(true);
-        Glide.with(container.context).load(list[position]).into(view.ivItem)
-
-        view.ivItem.setOnClickListener {
-            val viewPagerIntent = Intent(context, ViewPagerActivity::class.java)
-            viewPagerIntent.putExtra("pos",position)
-            viewPagerIntent.putExtra("add",false)
-            viewPagerIntent.putExtra("uri1",list[0])
-            if(list.size > 1)
-                viewPagerIntent.putExtra("uri2",list[1])
-            if(list.size > 2)
-                viewPagerIntent.putExtra("uri3",list[2])
-            if(list.size > 3)
-                viewPagerIntent.putExtra("uri4",list[3])
-
-            context.startActivity(viewPagerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-
-
+        if(isUri){
+            view.ivItem.setImageURI(Uri.parse(list[position]))
+        }else{
+            Glide.with(container.context).load(list[position]).into(view.ivItem)
         }
 
         container.addView(view)
         return view
     }
 
+
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         container.removeView(obj as View?)
     }
 
     override fun isViewFromObject(view: View, obj: Any): Boolean {
+
         return view == obj
     }
 

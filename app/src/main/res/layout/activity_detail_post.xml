@@ -168,6 +168,17 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
+                <ImageButton
+                    android:id="@+id/detail_post_delete_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="@+id/select_date_btn"
+                    app:layout_constraintEnd_toEndOf="@+id/viewpager"
+                    app:layout_constraintTop_toTopOf="@+id/select_date_btn"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:srcCompat="@drawable/ic_baseline_delete_24" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
