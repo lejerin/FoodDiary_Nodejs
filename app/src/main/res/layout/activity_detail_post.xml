@@ -179,6 +179,17 @@
                     app:layout_constraintVertical_bias="1.0"
                     app:srcCompat="@drawable/ic_baseline_delete_24" />
 
+                <ImageButton
+                    android:id="@+id/detail_post_modify_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="@+id/detail_post_delete_btn"
+                    app:layout_constraintEnd_toStartOf="@+id/detail_post_delete_btn"
+                    app:layout_constraintTop_toTopOf="@+id/detail_post_delete_btn"
+                    app:srcCompat="@drawable/ic_baseline_create_24" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

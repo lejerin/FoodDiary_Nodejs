@@ -26,10 +26,12 @@ import retrofit2.Response
 class DetailPostActivity : AppCompatActivity() {
 
     val photoList = mutableListOf<String>()
+    val stringList = mutableListOf<Boolean>()
 
     var id = ""
     var x = 0.0
     var y = 0.0
+    lateinit var nowData : Photo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +55,11 @@ class DetailPostActivity : AppCompatActivity() {
 
         })
 
+        stringList.add(true)
         photoList.add(intent.getStringExtra("uri1"))
-        val photoViewPagerAdapter: ViewPagerAdapter = ViewPagerAdapter(photoList as ArrayList<String>)
+        val photoViewPagerAdapter: ViewPagerAdapter = ViewPagerAdapter(photoList as ArrayList<String>,
+            stringList as ArrayList<Boolean>
+        )
         viewpager.adapter = photoViewPagerAdapter
 
 
@@ -62,7 +67,7 @@ class DetailPostActivity : AppCompatActivity() {
 
         add_date_text.text = intent.getStringExtra("date")
         id = intent.getStringExtra("id")
-        getPostnumCountPhoto(id)
+         getPostnumCountPhoto(id)
 
 
         detail_post_address_text.setOnClickListener {
@@ -90,10 +95,40 @@ class DetailPostActivity : AppCompatActivity() {
             alert.show()
         }
 
+        detail_post_modify_btn.setOnClickListener {
+            val modifyActivity = Intent(this, ModifyActivity::class.java)
+            modifyActivity.putExtra("id", nowData.id)
+            modifyActivity.putExtra("date",add_date_text.text.toString())
+            modifyActivity.putExtra("uri1",nowData.uri1)
+            modifyActivity.putExtra("uri2",nowData.uri2)
+            modifyActivity.putExtra("uri3",nowData.uri3)
+            modifyActivity.putExtra("uri4",nowData.uri4)
+            modifyActivity.putExtra("text",nowData.text)
+            modifyActivity.putExtra("name",nowData.locationname)
+            modifyActivity.putExtra("address",nowData.address)
+            modifyActivity.putExtra("time",nowData.time)
+            modifyActivity.putExtra("rank",nowData.ranknum)
+            startActivityForResult(modifyActivity, 11)
+        }
+
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 11 && resultCode == RESULT_OK){
+            System.out.println("초기화 액티비티")
+            photoList.clear()
+            stringList.clear()
+            getPostnumCountPhoto(id)
+        }
+
+
+
+    }
 
     private fun getPostnumCountPhoto(id: String) {
+
 
         RetrofitClient.getService().getPostnumCountPhoto("\"" + id + "\"").enqueue(object :
             Callback<Photo> {
@@ -108,6 +143,7 @@ class DetailPostActivity : AppCompatActivity() {
                     //목록 받아오기
                     if (data != null){
                         System.out.println(data)
+                        nowData = data
                         initView(data)
 
                     }
@@ -147,12 +183,21 @@ class DetailPostActivity : AppCompatActivity() {
 
     private fun initView(photo: Photo){
 
-        if(photo.uri2 != null)
+        if(photo.uri2 != null){
             photoList.add(photo.uri2)
-        if(photo.uri3 != null)
+            stringList.add(true)
+        }
+
+        if(photo.uri3 != null){
             photoList.add(photo.uri3)
-        if(photo.uri4 != null)
+            stringList.add(true)
+        }
+
+        if(photo.uri4 != null){
             photoList.add(photo.uri4)
+            stringList.add(true)
+        }
+
 
         viewpager.adapter!!.notifyDataSetChanged()
 

@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ViewPagerAdapter(private val list: ArrayList<String>): PagerAdapter() {
+class ViewPagerAdapter(private val list: ArrayList<String>, private val isStringList: ArrayList<Boolean>): PagerAdapter() {
 
     private lateinit var context: Context
 
@@ -29,8 +29,12 @@ class ViewPagerAdapter(private val list: ArrayList<String>): PagerAdapter() {
         val inflater = LayoutInflater.from(container.context)
         val view = inflater.inflate(R.layout.item_photo_viewpager, container, false)
 
-        view.ivItem.setClipToOutline(true);
-        Glide.with(container.context).load(list[position]).into(view.ivItem)
+        view.ivItem.setClipToOutline(true)
+        if(isStringList[position]){
+            Glide.with(container.context).load(list[position]).into(view.ivItem)
+        }else{
+            view.ivItem.setImageURI(Uri.parse(list[position]))
+        }
 
         view.ivItem.setOnClickListener {
             val viewPagerIntent = Intent(context, ViewPagerActivity::class.java)
@@ -53,6 +57,12 @@ class ViewPagerAdapter(private val list: ArrayList<String>): PagerAdapter() {
         return view
     }
 
+    fun removeItem(position: Int) {
+        if (position > -1 && position < list.size) {
+            list.removeAt(position)
+            notifyDataSetChanged()
+        }
+    }
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         container.removeView(obj as View?)
     }

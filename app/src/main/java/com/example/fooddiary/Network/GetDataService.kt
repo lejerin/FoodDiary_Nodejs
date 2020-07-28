@@ -40,11 +40,23 @@ interface GetDataService {
         @Query("date") date: String
     ): Call<TimeCount>
 
+    @PUT("times")
+    fun putTimeUpdate(
+        @Query("id") id: String,
+        @Query("date") date: String,
+        @Query("uri1") uri1: String
+    ): Call<Time>
+
     @POST("photos")
     fun putNewPhoto(
         @Body body: Photo
     ): Call<Photo>
 
+    @PUT("photos")
+    fun putPhotoUpdate(
+        @Query("id") id: String,
+        @Body body: Photo
+    ): Call<Photo>
 
     @GET("photos")
     fun getPostnumCountPhoto(
